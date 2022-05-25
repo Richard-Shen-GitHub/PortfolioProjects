@@ -147,6 +147,18 @@ the same, which is causing an issue when joining.
 
 Upon analysing, the data will also need to be cleaned and edit, specifically the date needs to follow the format YYYY/MM/DD instead of DD/MM/YYYY as MySQL cannot convert the date
 to datatype date or datetime. I believe this change will fix the order by errors.
+
+25/05/2022 11:08:13pm
+I have found the solution!!!!!!!!
+
+I was using STR_TO_DATE() incorrectly. The second parameter is meant to reflect what the string is formatted in. 
+For example, if the query was select str_to_date('08-10-2001', X)
+X should be equal to '%d-%m-%Y' => str_to_date('08/10/2001', '%d-%m-%Y')
+
+If the query was select str_to_date('October 8, 2001', X)
+X should be equal to '%M %d,%Y' => str_to_date('October 8, 2001', '%M %d,%Y')
+
+The issue was that I interpreted the second parameter in the str_to_date() function to be the format I wanted the output to be in. Upon further research, that is what the date_format() function is for!
 */
 
 select location, date_format(date, '%d/%m/%Y'), new_vaccinations
